@@ -11,6 +11,18 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
 /* Keep the hero/profile image from getting huge */
 
+.logo-img {
+    height: 32px;        /* Adjust size as needed */
+    width: auto;         /* Keeps proportions */
+    object-fit: contain; /* Ensures no distortion */
+}
+
+@media (max-width: 576px) {
+    .logo-img {
+        height: 26px; /* Slightly smaller on mobile */
+    }
+}
+
 /* Style for hero image */
 img.Untitled-design-2 {
   width: 300px;       /* change this number to resize */
