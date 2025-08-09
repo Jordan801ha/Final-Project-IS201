@@ -11,19 +11,20 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
 /* Keep the hero/profile image from getting huge */
 
+/* Navbar logo styling */
 .logo-img {
-    height: 5px;        /* Adjust size as needed */
-    width: auto;         /* Keeps proportions */
-    object-fit: contain; /* Ensures no distortion */
+    height: 40px;       /* Controls logo height */
+    width: auto;        /* Keeps proportions */
+    object-fit: contain;
+    display: inline-block;
 }
 
-@media (max-width: 26px) {
+@media (max-width: 576px) {
     .logo-img {
-        height: 26px; /* Slightly smaller on mobile */
-    }
-}
-
+        height: 30px;   /* Smaller on mobile */
 /* Style for hero image */
+
+
 img.Untitled-design-2 {
   width: 300px;       /* change this number to resize */
   max-width: 100%;    /* shrink for smaller screens */
