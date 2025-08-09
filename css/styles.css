@@ -12,7 +12,7 @@
 /* Keep the hero/profile image from getting huge */
 
 .logo-img {
-    height: 32px;        /* Adjust size as needed */
+    height: 5px;        /* Adjust size as needed */
     width: auto;         /* Keeps proportions */
     object-fit: contain; /* Ensures no distortion */
 }
