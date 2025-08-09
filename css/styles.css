@@ -17,7 +17,7 @@
     object-fit: contain; /* Ensures no distortion */
 }
 
-@media (max-width: 576px) {
+@media (max-width: 26px) {
     .logo-img {
         height: 26px; /* Slightly smaller on mobile */
     }
