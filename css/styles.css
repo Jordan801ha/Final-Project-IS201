@@ -13,9 +13,10 @@
 
 /* Navbar logo styling */
 /* Force navbar logo size */
+/* Force navbar logo size */
 .logo-img {
-    height: 40px !important; /* Force small size */
-    width: auto !important;  /* Keep proportions */
+    height: 40px !important;
+    width: auto !important;
     object-fit: contain;
     display: inline-block;
 }
