@@ -1,0 +1,61 @@
+/* Custom background color */
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation styling */
+nav {
+    background-color: #222;
+    padding: 10px;
+    text-align: center;
+}
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Header styling */
+header {
+    background-color: #ff6600;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+/* Section styles */
+.history-section, .race-types, .video-section, .my-races, .tableau-section {
+    padding: 20px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 8px;
+}
+
+/* Image styling */
+.dirtbike-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 10px auto;
+    border-radius: 8px;
+}
+
+/* Lists */
+ol, ul {
+    padding-left: 20px;
+}
+
+/* Footer styling */
+footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
