@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motocross – My Passion</title>
+    <!-- Link to your custom CSS -->
+    <link rel="stylesheet" href="motocross-styles.css">
+</head>
+<body>
+
+    <!-- Navigation back to professional site -->
+    <nav>
+        <a href="index.html">🏠 Back to Home</a> |
+        <a href="resume.html">📄 Resume</a> |
+        <a href="contact.html">📬 Contact</a>
+    </nav>
+
+    <!-- Page Title -->
+    <header>
+        <h1>Motocross: My Racing Journey</h1>
+    </header>
+
+    <!-- History Section with Image -->
+    <div class="history-section">
+        <h2 id="history">History of Motocross</h2>
+        <p>
+            Motocross began in the early 1900s in the United Kingdom as off-road motorcycle races 
+            known as "scrambles." Over the decades, it evolved into a competitive sport with dirt 
+            tracks, high jumps, and challenging terrain. I’ve personally been involved in motocross, 
+            desert racing, and grand prix races for years.
+        </p>
+
+        <!-- PLACEHOLDER FOR IMAGE #1 -->
+        <img src="assets/YOUR-DIRTBIKE-IMAGE-1.jpg" alt="Me racing a dirt bike" class="dirtbike-img">
+    </div>
+
+    <!-- Ordered + Unordered List Example -->
+    <section class="race-types">
+        <h2>Types of Races I've Competed In</h2>
+        <ol>
+            <li>Motocross Events
+                <ul>
+                    <li>Local Track Races</li>
+                    <li>Amateur Nationals</li>
+                    <li>Freestyle Exhibitions</li>
+                </ul>
+            </li>
+            <li>Desert Racing
+                <ul>
+                    <li>Baja-style Races</li>
+                    <li>Grand Prix Desert Challenges</li>
+                </ul>
+            </li>
+            <li>Grand Prix Racing</li>
+        </ol>
+    </section>
+
+    <!-- YouTube Video Embed -->
+    <section class="video-section">
+        <h2>Motocross in Action</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/LbfQqLiRkdo?si=8rVUiUNx8mBq-FVi" 
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+            encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+        </iframe>
+    </section>
+
+    <!-- Second Image Section with Anchor Link -->
+    <section class="my-races">
+        <h2>My Favorite Race Moments</h2>
+        <p>Click <a href="#history">here</a> to jump back to the history section.</p>
+
+        <!-- PLACEHOLDER FOR IMAGE #2 -->
+        <img src="assets/YOUR-DIRTBIKE-IMAGE-2.jpg" alt="Dirt bike jump" class="dirtbike-img">
+    </section>
+
+    <!-- Tableau Embed -->
+    <section class="tableau-section">
+        <h2>Motocross Race Statistics</h2>
+        <!-- Replace src link with your chosen Tableau visualization -->
+        <iframe src="https://public.tableau.com/views/RegionalSampleWorkbook/Storms" width="800" height="600"></iframe>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Jordan Harris – All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
