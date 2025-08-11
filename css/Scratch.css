@@ -97,3 +97,13 @@ h1 {
   text-shadow: 1px 1px 3px rgba(0,0,0,0.45);
   letter-spacing: 1px;
 }
+
+.grid-2 {
+  display: grid;                 /* positioning */
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 700px) {
+  .grid-2 { grid-template-columns: 1fr; }
+}
+
