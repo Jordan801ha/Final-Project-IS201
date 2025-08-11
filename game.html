@@ -1,203 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dirt Bike Maze</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dirt Bike Maze</title>
+<style>
+  :root{
+    --bike-cursor: url('assets/dirtbike-cursor.png') 16 16, crosshair;
+    --ktm:#ff6600; --dark:#0c0c0c; --panel:#111; --wall:#2c2c2c;
+    --good:#22c55e; --bad:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:#0b0b0b;color:#e9e9e9;font-family:system-ui,Arial,sans-serif}
+  .page{min-height:100%;display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px 16px 40px;cursor:var(--bike-cursor)}
+  header{text-align:center}
+  header h1{margin:4px 0 2px;font-size:clamp(22px,3.5vw,36px);letter-spacing:1px}
+  header p{margin:0;opacity:.85;font-size:14px}
+  .hud{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center}
+  .pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:6px 10px;border-radius:999px}
+  .btn{border:0;border-radius:8px;padding:8px 12px;background:var(--ktm);color:#111;font-weight:800;cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .maze-wrap{width:min(900px,92vw);aspect-ratio:16/9;background:#0e0e10;border:1px solid #242424;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.05);position:relative;overflow:hidden}
+  .track{position:absolute;inset:12px;background:linear-gradient(#0b1226,#0a1328);border-radius:10px;border:1px solid #1c1c1c;box-shadow:inset 0 0 0 2px #000}
+  /* Visual path strips (do NOT block mouse) */
+  .path{position:absolute;background:#0f172a;border-radius:8px;opacity:.85;pointer-events:none}
+  .p1{left:18px;top:18px;width:calc(100% - 36px);height:90px}
+  .p2{left:18px;top:108px;width:90px;height:calc(100% - 198px)}
+  .p3{left:108px;bottom:108px;width:calc(100% - 198px);height:90px}
+  .p4{right:18px;top:198px;width:90px;height:calc(100% - 306px)}
 
-  <!-- All-in-one styles -->
-  <style>
-    :root{
-      /* 👉 change this to your own cursor image if you want */
-      --bike-cursor: url('assets/dirtbike-cursor.png') 16 16, crosshair;
-      --ktm-orange:#ff6600;
-      --dark:#1d1d1d;
-      --light:#f7f7f7;
-      --wall:#2c2c2c;
-      --safe:#eaf6ff;
-      --good:#22c55e;
-      --bad:#ef4444;
-    }
+  /* Hit walls (these MUST be above everything) */
+  .wall{position:absolute;background:var(--wall);border:1px solid #000;box-shadow:inset 0 0 12px rgba(0,0,0,.65);z-index:5;pointer-events:auto}
+  /* top corridor */
+  .w1{left:18px;top:18px;width:calc(100% - 36px);height:14px}
+  .w2{left:18px;top:94px;width:calc(100% - 36px);height:14px}
+  .w3{left:18px;top:18px;width:14px;height:90px}
+  .w4{right:18px;top:18px;width:14px;height:180px}
+  /* left vertical */
+  .w5{left:18px;top:108px;width:90px;height:14px}
+  .w6{left:94px;top:108px;width:14px;height:calc(100% - 216px)}
+  .w7{left:18px;bottom:108px;width:90px;height:14px}
+  /* bottom horiz */
+  .w8{left:108px;bottom:108px;width:calc(100% - 216px);height:14px}
+  .w9{left:108px;bottom:18px;width:calc(100% - 216px);height:14px}
+  /* right vertical to finish */
+  .w10{right:18px;top:198px;width:14px;height:calc(100% - 306px)}
+  .w11{right:108px;top:198px;width:14px;height:calc(100% - 306px)}
+  .w12{right:18px;bottom:198px;width:90px;height:14px}
 
-    html, body{
-      height:100%;
-      margin:0;
-      background:#111;
-      color:#222;
-      font-family: system-ui, Arial, sans-serif;
-    }
+  /* Zones */
+  .zone{position:absolute;display:grid;place-items:center;font-weight:900;letter-spacing:.5px;text-transform:uppercase;border-radius:8px;padding:.2rem 0;user-select:none;z-index:6}
+  .start{left:18px;top:18px;width:110px;height:60px;background:#073b18;color:#b9ffd0;border:1px solid #0a8a3b}
+  .finish{right:18px;bottom:18px;width:130px;height:70px;background:#3b0712;color:#ffd1d8;border:1px solid #a30b2c}
 
-    .page{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:18px;
-      padding:20px 16px 40px;
-      background: radial-gradient(1200px 600px at 50% -200px, #222 0, #141414 45%, #0c0c0c 100%);
-      cursor: var(--bike-cursor);
-    }
-
-    header{
-      text-align:center;
-      color:#fff;
-    }
-    header h1{
-      margin:0 0 6px;
-      letter-spacing:1px;
-      font-weight:900;
-      font-size: clamp(22px, 3.5vw, 36px);
-      text-shadow: 0 2px 6px rgba(0,0,0,.35);
-    }
-    header p{
-      margin:0;
-      opacity:.9;
-      font-size:14px;
-    }
-
-    .hud{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:center;
-      color:#fff;
-      font-size:14px;
-    }
-    .pill{
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.15);
-      padding:6px 10px;
-      border-radius:999px;
-    }
-    .btn{
-      appearance:none;
-      border:0;
-      border-radius:8px;
-      padding:10px 12px;
-      background:var(--ktm-orange);
-      color:#111;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:0 6px 18px rgba(255,102,0,.25);
-    }
-    .btn:active{ transform: translateY(1px); }
-
-    /* MAZE AREA */
-    .maze-wrap{
-      width:min(900px, 92vw);
-      aspect-ratio: 16 / 9;
-      background: linear-gradient(#0f0f10, #070708);
-      border-radius:14px;
-      border:1px solid #2a2a2a;
-      box-shadow: 0 20px 60px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.04);
-      position:relative;
-      overflow:hidden;
-      cursor: var(--bike-cursor);
-    }
-
-    /* Optional background image: a faint track look */
-    .maze-wrap::before{
-      content:"";
-      position:absolute; inset:0;
-      background: url('assets/maze-track.jpg') center/cover no-repeat;
-      opacity:.18; /* set to 0 to hide if you don’t have the image */
-      pointer-events:none;
-      filter: saturate(1.2) contrast(1.1);
-    }
-
-    .track{
-      position:absolute; inset:12px;
-      background:linear-gradient(#0a0a0a,#0c0c0c);
-      border-radius:10px;
-      border:1px solid #262626;
-      box-shadow: inset 0 0 0 2px #000, inset 0 0 30px rgba(0,0,0,.4);
-      overflow:hidden;
-    }
-
-    /* “Safe path” visual (light strip) */
-    .path{
-      position:absolute;
-      background: #0f172a;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.03);
-      border-radius:8px;
-      opacity:.9;
-    }
-
-    /* Walls that cause "crash" */
-    .wall{
-      position:absolute;
-      background: var(--wall);
-      border:1px solid #000;
-      box-shadow: inset 0 0 12px rgba(0,0,0,.65);
-    }
-
-    /* Start & Finish zones */
-    .zone{
-      position:absolute;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      border-radius:8px;
-      padding:.2rem;
-      user-select:none;
-    }
-    .start{ background: #073b18; color:#b9ffd0; border:1px solid #0a8a3b; }
-    .finish{ background:#3b0712; color:#ffd1d8; border:1px solid #a30b2c; }
-
-    /* Status banner */
-    .status{
-      position:absolute; inset:auto 12px 12px auto;
-      background: rgba(0,0,0,.6);
-      color:#fff; padding:8px 10px; border-radius:8px;
-      font-size:13px;
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .status.ok{ outline:2px solid var(--good); }
-    .status.fail{ outline:2px solid var(--bad); }
-
-    /* tiny legend */
-    .legend{
-      color:#aaa; font-size:12px; text-align:center; margin-top:6px;
-    }
-
-    /* ——— Layout the maze pieces ——— */
-    /* zones */
-    .start{ left:18px; top:18px; width:110px; height:60px; }
-    .finish{ right:18px; bottom:18px; width:130px; height:70px; }
-
-    /* path segments (visual only, walls do the collision) */
-    .path.p1{ left:18px; top:18px; width:calc(100% - 36px); height:90px; }
-    .path.p2{ left:18px; top:108px; width:90px; height:calc(100% - 198px); }
-    .path.p3{ left:108px; bottom:108px; width:calc(100% - 198px); height:90px; }
-    .path.p4{ right:18px; top:198px; width:90px; height:calc(100% - 306px); }
-
-    /* WALLS (hitboxes) — keep these snug along the edges of the path */
-    /* top corridor walls */
-    .wall.w1{ left:18px; top:18px; width:calc(100% - 36px); height:14px; }               /* top border */
-    .wall.w2{ left:18px; top:94px; width:calc(100% - 36px); height:14px; }               /* bottom border of top corridor */
-    .wall.w3{ left:18px; top:18px; width:14px; height:90px; }                            /* left border near start */
-    .wall.w4{ right:18px; top:18px; width:14px; height:180px; }                          /* right border extending down */
-
-    /* left vertical hallway */
-    .wall.w5{ left:18px; top:108px; width:90px; height:14px; }                           /* top cap of vertical */
-    .wall.w6{ left:94px; top:108px; width:14px; height:calc(100% - 216px); }             /* right border of vertical */
-    .wall.w7{ left:18px; bottom:108px; width:90px; height:14px; }                        /* bottom cap of vertical */
-
-    /* bottom horizontal */
-    .wall.w8{ left:108px; bottom:108px; width:calc(100% - 216px); height:14px; }         /* top border of bottom hallway */
-    .wall.w9{ left:108px; bottom:18px; width:calc(100% - 216px); height:14px; }          /* bottom border of bottom hallway */
-
-    /* right vertical to finish */
-    .wall.w10{ right:18px; top:198px; width:14px; height:calc(100% - 306px); }           /* left border of right vertical */
-    .wall.w11{ right:108px; top:198px; width:14px; height:calc(100% - 306px); }          /* right border of right vertical */
-    .wall.w12{ right:18px; bottom:198px; width:90px; height:14px; }                      /* top cap near finish */
-
-    /* Prevent cheating by leaving the box */
-    .maze-wrap:hover{ outline:2px dashed rgba(255,255,255,.15); }
-  </style>
+  .status{position:absolute;right:12px;bottom:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 10px;border-radius:8px;font-size:13px;border:1px solid rgba(255,255,255,.12);z-index:7}
+  .status.ok{outline:2px solid var(--good)}
+  .status.fail{outline:2px solid var(--bad)}
+</style>
 </head>
 <body>
   <div class="page">
@@ -210,13 +69,12 @@
       <span class="pill">⏱️ Time: <strong id="time">0.00s</strong></span>
       <span class="pill">🏁 Best: <strong id="best">—</strong></span>
       <button class="btn" id="resetBtn">Reset</button>
-      <a class="pill" href="motocross.html" style="text-decoration:none;color:#fff;">← Back to Scratch Page</a>
+      <a class="pill" href="Scratch.html" style="text-decoration:none;color:#fff;">← Back to Scratch Page</a>
     </div>
 
     <div class="maze-wrap" id="maze">
       <div class="track">
-
-        <!-- Visual path (just for looks) -->
+        <!-- Visual path -->
         <div class="path p1"></div>
         <div class="path p2"></div>
         <div class="path p3"></div>
@@ -226,21 +84,93 @@
         <div class="zone start" id="start">Start</div>
         <div class="zone finish" id="finish">Finish</div>
 
-        <!-- Walls that trigger a crash -->
-        <div class="wall w1"></div>
-        <div class="wall w2"></div>
-        <div class="wall w3"></div>
-        <div class="wall w4"></div>
-        <div class="wall w5"></div>
-        <div class="wall w6"></div>
-        <div class="wall w7"></div>
-        <div class="wall w8"></div>
-        <div class="wall w9"></div>
-        <div class="wall w10"></div>
-        <div class="wall w11"></div>
-        <div class="wall w12"></div>
+        <!-- Walls (hitboxes) -->
+        <div class="wall w1"></div><div class="wall w2"></div><div class="wall w3"></div><div class="wall w4"></div>
+        <div class="wall w5"></div><div class="wall w6"></div><div class="wall w7"></div>
+        <div class="wall w8"></div><div class="wall w9"></div>
+        <div class="wall w10"></div><div class="wall w11"></div><div class="wall w12"></div>
 
-        <!-- status bubble -->
         <div class="status" id="status">Hover START to begin</div>
       </div>
-      <div class="legend">Tip: desktop works best. Set a tiny PNG as your cursor at <code>assets/dirtbike-cursor.png</code>.</
+    </div>
+  </div>
+
+<script>
+  // --- Game state ---
+  let started = false, finished = false, startTime = 0, timerId = null;
+  const timeEl = document.getElementById('time');
+  const bestEl = document.getElementById('best');
+  const statusEl = document.getElementById('status');
+  const maze = document.getElementById('maze');
+  const startZone = document.getElementById('start');
+  const finishZone = document.getElementById('finish');
+  const walls = Array.from(document.querySelectorAll('.wall'));
+
+  // Load best time
+  const BEST_KEY = 'maze_best_time_v1';
+  let best = Number(localStorage.getItem(BEST_KEY));
+  if (!isFinite(best)) best = null;
+  bestEl.textContent = best ? best.toFixed(2) + 's' : '—';
+
+  function start() {
+    started = true; finished = false;
+    startTime = performance.now();
+    updateTimer();
+    statusEl.textContent = 'Riding… stay on the path!';
+    statusEl.classList.remove('fail','ok');
+  }
+
+  function win() {
+    if (!started || finished) return;
+    finished = true; clearInterval(timerId);
+    const t = (performance.now() - startTime) / 1000;
+    statusEl.textContent = '🏆 Finished in ' + t.toFixed(2) + 's';
+    statusEl.classList.add('ok'); statusEl.classList.remove('fail');
+    if (!best || t < best) {
+      best = t; localStorage.setItem(BEST_KEY, String(best));
+      bestEl.textContent = best.toFixed(2) + 's';
+    }
+  }
+
+  function crash(msg='💥 You hit a wall!') {
+    if (!started || finished) return;
+    finished = false; started = false; clearInterval(timerId);
+    statusEl.textContent = msg + ' Hover START to try again.';
+    statusEl.classList.add('fail'); statusEl.classList.remove('ok');
+    timeEl.textContent = '0.00s';
+  }
+
+  function updateTimer() {
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      if (!started || finished) return;
+      const t = (performance.now() - startTime) / 1000;
+      timeEl.textContent = t.toFixed(2) + 's';
+    }, 50);
+  }
+
+  // Events
+  startZone.addEventListener('mouseenter', () => {
+    if (!started) start();
+  });
+
+  finishZone.addEventListener('mouseenter', win);
+
+  walls.forEach(w => {
+    w.addEventListener('mouseenter', () => crash());
+  });
+
+  // Leaving the maze is a crash (prevents cheating)
+  maze.addEventListener('mouseleave', () => {
+    if (started && !finished) crash('💥 Off track!');
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    started = false; finished = false; clearInterval(timerId);
+    timeEl.textContent = '0.00s';
+    statusEl.textContent = 'Hover START to begin';
+    statusEl.classList.remove('fail','ok');
+  });
+</script>
+</body>
+</html>
