@@ -107,3 +107,10 @@ h1 {
   .grid-2 { grid-template-columns: 1fr; }
 }
 
+.story {
+  font-family: Arial, sans-serif; /* match your body text */
+  font-weight: 400;
+  color: #222;
+  line-height: 1.6;
+}
+
